@@ -6,7 +6,8 @@ Agent skills for Claude Code, Codex, Cursor and other agents that read `SKILL.md
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`issue-review`](skills/issue-review/SKILL.md)   | Reviews an issue or ticket for what the draft missed: alerting coverage, failure when it persists, docs blast radius, open decisions, scope                               |
 | [`issue-writing`](skills/issue-writing/SKILL.md) | Writes issues in fluff-free prose that follows the ASD-STE100 Simplified Technical English rules, in a fixed Problem / Impact / Change / Decisions / Acceptance structure |
-| [`pr-writing`](skills/pr-writing/SKILL.md)       | Writes PR titles and descriptions in the same prose rules, in a fixed Problem / Change / Tests / Verification / Not changed / Follow-ups structure                       |
+| [`pr-writing`](skills/pr-writing/SKILL.md)       | Writes PR titles and descriptions in the same prose rules, in a fixed Problem / Change / Tests / Verification / Not changed / Follow-ups structure                        |
+| [`ramp`](skills/ramp/SKILL.md)                   | Runs a 15–25 minute tutor session on a ticket: gathers context from Linear, GitHub and Slack, then teaches it until you can make and defend the ticket's decisions        |
 
 ## Install
 
