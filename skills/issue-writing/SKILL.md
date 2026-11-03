@@ -53,102 +53,11 @@ Use these sections, in this order. Omit a section that has no content. Do not ad
 - Write: `Outbox drainer reports a failed delete as a failed publish`
 - Do not write: `Fix outbox issue`, `[BUG] Improve error handling in drainer`, `Investigate delete failures 🐛`
 
-## STE writing rules
+## Writing rules
 
-These are the writing rules of ASD-STE100. The standard also has a dictionary of approved words. This skill does not
-include the dictionary. Apply its principle: one word, one meaning, and the simplest common word.
-
-### Words
-
-- Use one term for one thing. Use the name from the code (the metric name, the class name, the alarm name). Repeat it.
-  Do not use synonyms for variety.
-- Give a word only one meaning. If "check" is a verb, do not also use it as a noun for a CI job.
-- Use the simplest common word: "use", not "utilize"; "start", not "initiate"; "show", not "demonstrate"; "help", not
-  "facilitate"; "about", not "approximately".
-- Write the full verb, not a noun made from a verb: "decide", not "make a decision"; "the drainer deletes the row", not
-  "the deletion of the row is performed".
-- Keep noun clusters to three words or fewer. "outbox delete failure count" is the limit. Break longer clusters with
-  "of", "for" or a relative clause.
-- Do not use contractions: "do not", not "don't".
-- Use technical names (code identifiers, product names, error codes) as they are, in backticks.
-
-### Sentences
-
-- Write one idea per sentence.
-- Keep a sentence to 20 words or fewer in the Change, Decisions and Acceptance sections. Keep it to 25 words or fewer in
-  the Problem and Impact sections.
-- Use the active voice. Name the actor: "The drainer deletes the row", not "The row is deleted".
-- Use the simple tenses: simple present, simple past, future with "will". Do not use progressive forms such as "is
-  failing" or "has been failing".
-- Do not use "-ing" words as verbs or nouns, except in technical names. Write "when the delete fails", not "on failing
-  to delete".
-- Write requirements in the imperative: "Add an alarm", not "An alarm should be added" or "We might want to add an
-  alarm".
-- Keep the articles ("the", "a"). Do not write in telegraphic style.
-- Put a condition before the instruction: "If the delete fails, log the row's key."
-
-### Paragraphs and lists
-
-- Give each paragraph one topic. Use six sentences or fewer.
-- Use a list for three or more parallel items, or for steps. Use prose for one or two items.
-- Write list items in the same grammatical form. Start each requirement with a verb.
-
-## Fluff to delete
-
-Delete these on sight. Each one delays the reader or tells the reader what to think in place of a fact.
-
-**Openers and meta-text.** "This ticket aims to", "The purpose of this issue is", "As discussed", "Just a heads-up",
-"Context:", "TL;DR", "Background" over a section that only repeats the Problem. Start with the fact.
-
-**Hedges without a reason.** "Maybe", "possibly", "might", "it seems", "we may want to", "consider". Keep a hedge only
-when there is a real unknown, and write the unknown as a fact: "The cause is not known. The logs from 02:00 to 03:00 are
-missing."
-
-**Puffery and labels.** "critical", "crucial", "important to note", "significant", "major issue", "a testament to",
-"plays a key role". Show the consequence and let the reader judge it: write "Newer rows do not drain while the fault
-continues", not "This is a critical issue".
-
-**Interpretive metadiscourse.** "The key point is", "Note that", "It is worth noting", "As you can see", "This
-distinction matters". Delete the aside and keep the fact.
-
-**Weasel attribution.** "People say", "it is widely known", "best practice says". Name the source (a doc, a person, a
-file:line), or delete the claim.
-
-**Binary contrast and colon reveals.** "This is not X, it is Y." "The real problem: the delete." State Y directly: "The
-delete fails."
-
-**Trailing -ing analysis.** "...highlighting the need for better monitoring." Replace it with the consequence: "...so no
-alarm fires."
-
-**Recap endings and kickers.** "In summary", "Overall", "Ultimately", or a last line that restates the issue. End on the
-last requirement or acceptance criterion.
-
-**Narrative and provenance.** How the bug was found, who noticed it, how long the search took. Put provenance in a
-comment if it helps. The description holds only what the implementer needs.
-
-**Formatting noise.** Emoji, bold inside sentences for emphasis, headings over one-sentence sections, horizontal rules,
-nested bullets deeper than two levels. Use bold only for a list item's label.
-
-**Banned words.** delve, foster, leverage, utilize, facilitate, empower, streamline, robust, seamless, cutting-edge,
-holistic, synergy, paradigm, game changer, tapestry, realm, landscape (outside geography), multifaceted, meticulous,
-intricate, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving, unlock, navigate (outside UI
-navigation), journey.
-
-**Empty adverbs.** just, simply, actually, really, basically, literally, truly, fundamentally, importantly, crucially,
-inherently, clearly, obviously. Delete each one unless it changes the meaning.
-
-**Empty phrases.** in order to (write "to"), at this point in time (write "now"), due to the fact that (write
-"because"), in terms of, with regard to, when it comes to, going forward, at the end of the day, the reality is.
-
-**Em dashes.** Do not use them. Use a period, a comma, a colon before a list, or parentheses.
-
-## Precision rules
-
-- Give a location for every claim about the code: `path/file.ts:72`, a function name, or a config key.
-- Give numbers with units: "3 one-minute periods", "about 25 messages each second". Do not write "quickly" or "a lot".
-- Name the environment when behaviour differs between environments: "in prd", "in dev and stg".
-- Quote log messages, metric names and error text exactly, in backticks.
-- Do not state as fact what you did not check. Write "Not checked:" and the item.
+Read [references/writing-rules.md](references/writing-rules.md) before you write, and apply every rule in it: the STE
+rules, the fluff to delete and the precision rules. Sentence limits in an issue: 20 words or fewer in Change, Decisions
+and Acceptance, and 25 words or fewer in Problem and Impact.
 
 ## Workflow
 
@@ -175,7 +84,7 @@ Do each test on the final draft:
 - [ ] Each requirement starts with a verb in the imperative.
 - [ ] No passive sentence hides the actor.
 - [ ] Each thing has one name everywhere in the issue.
-- [ ] No banned word, empty adverb, empty phrase, em dash or emoji remains.
+- [ ] No banned word, empty adverb, empty phrase, contrast phrase, ALL CAPS emphasis, em dash or emoji remains.
 - [ ] No sentence tells the reader what to think in place of a fact.
 - [ ] Each acceptance criterion is a thing that a reviewer can see: a test, a snapshot, an alert or a doc diff.
 - [ ] If you delete any sentence, the implementer loses information. (Test each sentence. Delete it if not.)
