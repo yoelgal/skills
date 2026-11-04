@@ -41,7 +41,8 @@ reason.>
 
 ## Verification
 
-<The exact commands that were run, and their results.>
+<Evidence that the change works outside its unit tests: the built code run against a real dependency or a local
+stand-in, before and after the change, with the output. Then the exact commands that were run, and their results.>
 
 ## Not changed
 
@@ -75,6 +76,11 @@ and 20 words or fewer in every other section.
   guards.
 - Give the exact command for each check that was run, and its result with numbers: "`pnpm vitest run`: 1055 passed".
   Do not write "tests pass".
+- If the change alters what a caller sees (an API, an error, a contract, a log line, a page), show it working outside
+  the unit tests. Run the built code against a real dependency or a local stand-in, before and after the change. Put the
+  trimmed output in Verification, as a before and after table when there are several cases. Passing tests do not show
+  this, because a test can share the author's wrong idea of the dependency.
+- If the change alters a contract, name each caller of it and say what the change does to that caller.
 - Write "Not checked:" and the item for a check that was not run, for example an environment that was not deployed.
 - Do not claim more than the change does. If the change fixes one case, name the cases it does not fix under
   Follow-ups.
@@ -104,6 +110,8 @@ Do each test on the final draft:
 - [ ] No sentence in Problem is longer than 25 words. No sentence in another section is longer than 20 words.
 - [ ] Each test says whether it fails without the change.
 - [ ] Each check in Verification has its exact command and its result.
+- [ ] A change that a caller can see has before and after output from outside the unit tests, or a "Not checked:" line
+      with the reason.
 - [ ] Nothing in the description describes an earlier version of the change.
 - [ ] Each thing has one name everywhere in the description.
 - [ ] No banned word, empty adverb, empty phrase, contrast phrase, ALL CAPS emphasis, em dash or emoji remains.
