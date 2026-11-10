@@ -1,21 +1,20 @@
 ---
 name: ramp
 description:
-  Quick tutor session (15–25 min) that gives the user enough background on a ticket to make informed decisions in the
-  codebase. Pulls context from Linear (ticket, related and past issues, projects, docs), GitHub (code, PRs, blame) and
-  Slack, then teaches it with active-recall techniques. Use when the user types `/ramp <ticket id or url>`, or says they
-  don't understand a ticket's background.
+  Run a read-only tutor session that teaches the background of a ticket from Linear, GitHub and Slack. Use when the
+  user gives a ticket to ramp on, or does not understand the background of a ticket. Trigger phrases: ramp me up, ramp
+  on this ticket, explain the background of this ticket, I don't understand this ticket.
 ---
 
-# /ramp <ticket>
+# Ramp on a ticket
 
-Goal: **the user can make the ticket's decisions and defend them.** Not "knows everything about the area". Stop teaching
-once they can.
+Take the ticket id or URL from the request. If the request names none, ask for it.
 
-## 1. Research first (silent, ~5 min, no chat output)
+Goal: **the user can make the ticket's decisions and defend them.** Stop teaching once they can.
 
-Gather everything before teaching. Collect first, then triage. Use whichever of these tools are connected; skip any that
-aren't and say which ones were missing.
+## 1. Research first (silent, no chat output)
+
+Use the tools that the session has; skip the others and say which ones were missing.
 
 1. **Linear**:
    - The ticket and its comments (the description often skips the discussion).
@@ -29,15 +28,15 @@ aren't and say which ones were missing.
    - `gh pr list --search "<keyword>" --state all` for the area.
    - Find the code: `rg` the key terms, then `git log --oneline -- <path>` and `git blame` on the lines the ticket
      touches. Read the commits that explain _why_ the code looks this way.
-   - READMEs, ADRs, `docs/` and agent instruction files (CLAUDE.md, AGENTS.md) in the touched area.
-3. **Slack** (if connected): search the ticket id, the feature name and linked PR numbers. Read whole threads, not just
-   hits. Note who decided what. If Slack isn't connected, ask the user to paste any threads they know of.
+   - READMEs, ADRs, `docs/` and agent instruction files (`CLAUDE.md`, `AGENTS.md`) in the touched area.
+3. **Slack** (if connected): search the ticket id, the feature name and linked PR numbers. Read whole threads, not only
+   the hits. Note who decided what. If Slack isn't connected, ask the user to paste any threads they know of.
 4. **Earlier ramps**: if the user has saved cheat sheets from past sessions, check them for the same area.
 5. **Triage** into a private brief (keep it in context, don't print it):
    - **Problem**: what's broken or missing, for whom, and why now.
-   - **System map**: the 3–6 components involved and how data flows between them.
+   - **System map**: the 3 to 6 components involved and how data flows between them.
    - **History**: earlier decisions and the reasons for them, past incidents, reverts.
-   - **Decisions this ticket needs**: 2–4 real choices, each with options and trade-offs.
+   - **Decisions this ticket needs**: 2 to 4 choices that the ticket forces, each with options and trade-offs.
    - **Unknowns**: things no source answers. These become "ask X" items, with the person most likely to know (ticket
      author, last committer, whoever decided in Slack).
    - **Glossary**: every internal term and acronym the user will meet.
@@ -46,30 +45,28 @@ Never invent context. If a source has nothing, say so. Cite each fact (issue id,
 
 ## 2. Plan the session (one short message)
 
-Show a topic list with a minute budget for each, ending with the decision drill and the explain-back. Default total is
-25 min or less. Check the time after each topic. If behind, shorten what's left (teach plus one question) but never drop
-a decision topic.
+Show a topic list, ending with the decision drill and the explain-back. Keep it short. If the user wants to stop early,
+shorten what's left (teach plus one question) but never drop a decision topic.
 
 ## 3. Teach (one concept at a time)
 
 The user hasn't met this material, so **teach first, then question**. Never quiz on facts you haven't shown.
 
-- **Prior-knowledge question first:** "Have you touched X before? What do you think Y does?" Build on the answer. New
-  facts stick when they link to something already known.
+- **Prior-knowledge question first:** "Have you touched X before? What do you think Y does?" Then build on the answer.
 - **Concrete before abstract.** One real request, one real row, one real code path. Then one line stating the rule.
-- **Show, don't write.** Use a diagram for the system map, a call sequence or a state machine. Render it visually if the
-  client supports it; otherwise use a mermaid block or a small table.
-- **Plain, short sentences:** about 15–20 words max, one idea each, active voice, simple words. Spell out every internal
-  term and acronym the first time.
+- **Show, don't write.** Use a diagram for the system map, a call sequence or a state machine. Render it as an image if
+  the client supports it; otherwise use a mermaid block or a small table.
+- **Plain, short sentences:** about 15 to 20 words at most, one idea each, active voice, simple words. Spell out every
+  internal term and acronym the first time.
 - **Link to what they know.** Map new pieces to common patterns or things the user has mentioned. Say where the analogy
   breaks.
-- **Real code, small.** Show the 5–15 lines that matter as `path:line`, not whole files.
+- **Real code, small.** Show the 5 to 15 lines that matter as `path:line`, not whole files.
 - **Then one question that makes them apply it** to a new case: predict what happens if a field is null, trace a
   request, spot what breaks. Never a question the teaching chunk answers word for word. One question per message; wait
   for the answer.
-- **Misconception probe:** at least once, ask something a plausible wrong mental model gets wrong (e.g. "this cache is
-  per user" when it's global).
-- **Callback** every ~2 concepts: a quick recall question on an earlier one. Retrieval strengthens memory.
+- **Misconception probe:** at least once, ask something a plausible wrong mental model gets wrong (e.g. "this ripeness
+  cache is per banana" when it is per bunch).
+- **Callback** every ~2 concepts: a quick recall question on an earlier one.
 - **Stuck twice:** switch format (diagram ↔ code trace ↔ concrete scenario). Never repeat the same explanation.
 - **Half-right:** one follow-up on the missing half before moving on.
 - **Park tangents** with a one-line answer. Handle them after the explain-back.
@@ -87,16 +84,16 @@ For each decision in the brief:
 End with at least one question where they produce something: "What would you put in the PR description?" or "What test
 would catch the bug this ticket fixes?"
 
-## 5. Explain-back (2 min)
+## 5. Explain-back
 
-"Explain the ticket to a teammate in under a minute: the problem, the parts involved, and what you'll do and why." Mark
+"Explain the ticket to a teammate in a few sentences: the problem, the parts involved, and what you'll do and why." Mark
 it for the links between the parts, not the number of facts. Point out the gaps.
 
 ## 6. Wrap up
 
-1. Score honestly by level: understand, apply, analyse (how parts connect), evaluate (when a choice fails), create
-   (produce something new). A high score on easy questions shouldn't hide a shallow session. Say that an in-session
-   score isn't retention.
+1. Score by level, without inflation: understand, apply, analyse (how parts connect), evaluate (when a choice fails),
+   create (produce something new). A high score on easy questions shouldn't hide a shallow session. Say that an
+   in-session score isn't retention.
 2. Offer a cheat sheet: problem, system map (mermaid), glossary, decisions with the user's picks and reasons, open
    questions with who to ask, and every source link. **Ask where to save it** (or whether to save it at all). Remember
    their answer for future ramps if the client supports memory.
@@ -106,7 +103,6 @@ it for the links between the parts, not the number of facts. Point out the gaps.
 
 ## Rules
 
-- **Read-only.** Never comment on Linear, post in Slack, or push to GitHub during a ramp. Drafts only, shown to the
-  user, sent only on an explicit "send".
-- No code changes in this skill. When the user is ready, they start the ticket separately.
-- Keep chat short. If a reply needs more than ~6 lines, it should be a diagram or table.
+- **Read-only.** Change nothing in Linear, GitHub, Slack or the checkout during a ramp. Show drafts to the user, who
+  sends them.
+- Keep chat short. Turn a reply of more than about 6 lines into a diagram or a table.

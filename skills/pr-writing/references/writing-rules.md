@@ -5,20 +5,17 @@ Shared by the `issue-writing` and `pr-writing` skills. The two copies of this fi
 
 ## STE writing rules
 
-These are the writing rules of ASD-STE100. The standard also has a dictionary of approved words. These rules do not
-include the dictionary. Apply its principle: one word, one meaning, and the simplest common word.
-
 ### Words
 
 - Use one term for one thing. Use the name from the code (the metric name, the class name, the alarm name). Repeat it.
   Do not use synonyms for variety.
-- Describe what a thing is, not what it is not: "the key is free for a retry", not "the key is not left blocked".
+- Describe what a thing is, not what it is not: "the crate stays in the warehouse", not "the crate is not lost".
 - Give a word only one meaning. If "check" is a verb, do not also use it as a noun for a CI job.
 - Use the simplest common word: "use", not "utilize"; "start", not "initiate"; "show", not "demonstrate"; "help", not
   "facilitate"; "about", not "approximately".
-- Write the full verb, not a noun made from a verb: "decide", not "make a decision"; "the drainer deletes the row", not
-  "the deletion of the row is performed".
-- Keep noun clusters to three words or fewer. "outbox delete failure count" is the limit. Break longer clusters with
+- Write the full verb, not a noun made from a verb: "decide", not "make a decision"; "the shipper unloads the crate",
+  not "the unloading of the crate is performed".
+- Keep noun clusters to three words or fewer. "crate unload failure count" is the limit. Break longer clusters with
   "of", "for" or a relative clause.
 - Do not use contractions: "do not", not "don't".
 - Use technical names (code identifiers, product names, error codes) as they are, in backticks.
@@ -26,18 +23,15 @@ include the dictionary. Apply its principle: one word, one meaning, and the simp
 ### Sentences
 
 - Write one idea per sentence.
-- Keep a sentence to 20 words or fewer when it states a requirement, a decision or a checkable outcome. Keep it to 25
-  words or fewer when it describes behaviour or impact. The skill that loads these rules says which of its sections take
-  which limit.
-- Use the active voice. Name the actor: "The drainer deletes the row", not "The row is deleted".
+- Use the active voice. Name the actor: "The shipper unloads the crate", not "The crate is unloaded".
 - Use the simple tenses: simple present, simple past, future with "will". Do not use progressive forms such as "is
   failing" or "has been failing".
-- Do not use "-ing" words as verbs or nouns, except in technical names. Write "when the delete fails", not "on failing
-  to delete".
+- Do not use "-ing" words as verbs or nouns, except in technical names. Write "when the unload fails", not "on failing
+  to unload".
 - Write requirements in the imperative: "Add an alarm", not "An alarm should be added" or "We might want to add an
   alarm".
 - Keep the articles ("the", "a"). Do not write in telegraphic style.
-- Put a condition before the instruction: "If the delete fails, log the row's key."
+- Put a condition before the instruction: "If the unload fails, log the crate's id."
 
 ### Paragraphs and lists
 
@@ -49,15 +43,15 @@ include the dictionary. Apply its principle: one word, one meaning, and the simp
 
 Delete these on sight. Each one delays the reader or tells the reader what to think in place of a fact.
 
-**Openers and meta-text.** "This ticket aims to", "This PR", "The purpose of this issue is", "As discussed", "Just a heads-up",
-"Context:", "TL;DR", "Background" over a section that only repeats the Problem. Start with the fact.
+**Openers and meta-text.** "This ticket aims to", "This PR", "The purpose of this issue is", "As discussed", "Just a
+heads-up", "Context:", "TL;DR", "Background" over a section that only repeats the Problem. Start with the fact.
 
 **Hedges without a reason.** "Maybe", "possibly", "might", "it seems", "we may want to", "consider". Keep a hedge only
 when there is a real unknown, and write the unknown as a fact: "The cause is not known. The logs from 02:00 to 03:00 are
 missing."
 
 **Puffery and labels.** "critical", "crucial", "important to note", "significant", "major issue", "a testament to",
-"plays a key role". Show the consequence and let the reader judge it: write "Newer rows do not drain while the fault
+"plays a key role". Show the consequence and let the reader judge it: write "Newer crates do not ship while the fault
 continues", not "This is a critical issue".
 
 **Interpretive metadiscourse.** "The key point is", "Note that", "It is worth noting", "As you can see", "This
@@ -66,23 +60,23 @@ distinction matters". Delete the aside and keep the fact.
 **Weasel attribution.** "People say", "it is widely known", "best practice says". Name the source (a doc, a person, a
 file:line), or delete the claim.
 
-**Binary contrast and colon reveals.** "This is not X, it is Y." "The real problem: the delete." State Y directly: "The
-delete fails."
+**Binary contrast and colon reveals.** "This is not X, it is Y." "The real problem: the unload." State Y directly: "The
+unload fails."
 
 **Contrast language.** "rather than X", "instead of Y", "as opposed to Z". State what the thing is or does. Write "The
-drainer keeps the row", not "The drainer keeps the row rather than dropping it".
+shipper keeps the crate", not "The shipper keeps the crate rather than dropping it".
 
 **Trailing -ing analysis.** "...highlighting the need for better monitoring." Replace it with the consequence: "...so no
 alarm fires."
 
-**Recap endings and kickers.** "In summary", "Overall", "Ultimately", or a last line that restates the text above it. End on the
-last requirement or acceptance criterion.
+**Recap endings and kickers.** "In summary", "Overall", "Ultimately", or a last line that restates the text above it.
+End on the last requirement or acceptance criterion.
 
-**Narrative and provenance.** How the bug was found, who noticed it, how long the search took. Put provenance in a
-comment if it helps. The description holds only what the reader needs to act.
+**Narrative and provenance.** How the bug was found, who noticed it, how long the search took. Put it in a comment on
+the issue or PR if it helps. The description holds only what the reader needs to act.
 
-**Formatting noise.** Emoji, ALL CAPS for emphasis, bold inside sentences for emphasis, headings over one-sentence sections, horizontal rules,
-nested bullets deeper than two levels. Use bold only for a list item's label.
+**Formatting noise.** Emoji, ALL CAPS for emphasis, bold inside sentences for emphasis, headings over one-sentence
+sections, horizontal rules, nested bullets deeper than two levels. Use bold only for a list item's label.
 
 **Banned words.** delve, foster, leverage, utilize, facilitate, empower, streamline, robust, seamless, cutting-edge,
 holistic, synergy, paradigm, game changer, tapestry, realm, landscape (outside geography), multifaceted, meticulous,

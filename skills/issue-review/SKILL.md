@@ -1,27 +1,17 @@
 ---
 name: issue-review
 description:
-  Review an issue or ticket for what its draft missed, before it is filed or before work starts. It checks factual
-  claims against the code, alerting and detection coverage, how the failure behaves when it persists, the docs and
-  runbooks that must change, operational premises, decisions left open, and scope. Use when writing or filing an issue,
-  reviewing someone else's ticket, or picking up a ticket to implement, in any tracker (Linear, GitHub, Jira) and any
-  codebase. Triggers on "review this issue", "review the ticket", "what did this ticket miss", "tighten this ticket",
-  "issue review", or before creating an issue from a finding.
+  Review an issue or ticket for what its draft missed: wrong claims, lost alerts, persistent failures, stale docs,
+  open decisions and scope. Use when you write or file an issue, review a ticket, or pick up a ticket to implement.
+  Trigger phrases: review this issue, review the ticket, what did this ticket miss, tighten this ticket, issue review.
 ---
 
 # Issue review
 
-A first-draft ticket describes the bug its writer saw. It usually misses what the fix touches beyond the bug: the alarm
-that was quietly covering it, the runbook an on-call engineer will open, the doc that counts the thing being changed,
-the decision nobody wrote down. This review finds those before an implementer does, or before a reviewer finds them in
-the PR.
+Today's behaviour, if the ticket doesn't change it, is not a reason to block the ticket. Say so, and keep the gap.
 
-The output is a short numbered list of gaps headed **Where it needs tightening**. Each gap carries evidence, why it
-matters, and the exact edit to the ticket. Today's behaviour, if the ticket doesn't change it, is not a reason to block
-the ticket. Say so, and keep the gap.
-
-This skill checks what an issue says. The `issue-writing` skill controls how the issue says it. When you edit the issue
-after the review, apply `issue-writing` to the text you change.
+This skill checks what an issue says. The `issue-writing` skill controls how the issue says it. When you edit the
+issue after the review, apply `issue-writing` to the text you change.
 
 ## Inputs
 
@@ -41,37 +31,36 @@ and its output, or a quoted line of the ticket.
 
 Verify every factual statement in the ticket: file paths and line numbers, function and metric names, current behaviour,
 environments and stages, counts, defaults. Read the code that sets each one, such as the config that turns a feature on
-per environment. Don't trust a doc that describes it, since docs drift. A wrong claim in a ticket gets copied into the
-fix, the docs and the next ticket. If you wrote the ticket yourself, check it with the same rigour.
+per environment. Don't trust a doc that describes it, since docs drift. If you wrote the ticket yourself, check it with
+the same rigour.
 
 ### 2. Detection coverage survives the change
 
-When the change moves, splits, renames, re-labels or removes a signal (a metric, log line, error code, event or status),
-find everything that consumed the old signal: alerts, dashboards, SLOs, log-based metrics, scripts, agent skills. Then
-answer:
+A change can move, split, rename, re-label or remove a signal: a metric, log line, error code, event or status. When it
+does, find everything that consumed the old signal: alerts, dashboards, SLOs, log-based metrics, scripts and agent
+skills. Then answer:
 
 - What alerted on this failure before the change, and how fast?
 - After the change, what alerts on it, how fast, and does the alert point at the right runbook section?
 - Does the ticket make the new alert **required**? Wording such as "add an alarm if one exists" or "consider alerting"
-  is a gap whenever an alert does exist or is needed. Rewrite it as a requirement in the acceptance criteria.
-
-A fix that makes a signal more accurate can also make it silent.
+  is a gap whenever an alert exists or the change needs one. Rewrite it as a requirement in the acceptance criteria.
 
 ### 3. The failure mode when it persists
 
-Tickets describe one occurrence ("one harmless duplicate", "a single retry"). Work out what happens when the fault lasts
-for an hour:
+Tickets describe one occurrence ("one harmless duplicate", "one retry"). Work out what happens when the fault lasts for
+an hour:
 
 - Retry and polling loops: what repeats, how often, and against what?
 - Ordering: does a stuck item block everything behind it, as in an oldest-first read or a FIFO queue?
 - Amplification: does each cycle send load downstream, such as duplicates, idempotent calls or writes?
 - Who notices, and when?
 
-If the real impact is worse than the ticket says, rewrite the Impact section. Severity and paging follow from it.
+If the impact over an hour is worse than the ticket says, rewrite the Impact section. Severity and paging follow from
+it.
 
 ### 4. Severity and alerting mapped to config
 
-"Pages at P1", "critical" and "notify on-call" mean nothing until they are mapped to the codebase's alert config. Find
+"Pages at P1", "critical" and "notify on-call" mean nothing until you map them to the alert config of the codebase. Find
 how the existing comparable alerts set severity or paging: an explicit field, a router default per environment, or a
 topic or channel. State the concrete setting in the ticket, including which environments page.
 
@@ -87,15 +76,15 @@ component names. Also find every place that **lists or counts** them. List each 
 - agent skills and automation that name alerts, metrics or counts
 - READMEs and architecture docs
 
-A count or a list that the change makes wrong is a finding, even several files away. If the repo's rules say docs ship
-in the same change, the ticket lists them.
+A count or a list that the change makes wrong is a finding, even when the count is in another file. If the repo's rules
+say docs ship in the same change, the ticket lists them.
 
 ### 6. The operator's premise holds
 
 Runbook remedies in tickets are often guesses: "check the role has permission X", "check the queue URL". Verify each one
-against the infra code. Is the permission already granted? Can the setting actually drift? Point the remedy at the
-likely causes, such as throttling, quotas, system errors or the dependency's own health, and name where the operator
-sees them (which dashboard widget, which metric).
+against the infra code. Is the permission already granted? Can the setting drift? Point the remedy at the likely causes,
+such as throttling, quotas, system errors or the health of the dependency. Name where the operator sees them (which
+dashboard widget, which metric).
 
 ### 7. Decisions left open
 
@@ -120,8 +109,8 @@ either way, but they still get decided.
 
 ### 9. Acceptance is checkable
 
-Each acceptance criterion maps to a test, a snapshot, or a doc diff a reviewer can see. Rewrite "works correctly" or "is
-monitored" as observable outcomes. Bug fixes need a regression test that fails without the fix.
+Each acceptance criterion maps to a test, a snapshot, or a doc diff a reviewer can see. Rewrite "works correctly" or
+"has monitoring" as observable outcomes. Bug fixes need a regression test that fails without the fix.
 
 ## Output
 
@@ -137,8 +126,7 @@ monitored" as observable outcomes. Bug fixes need a regression test that fails w
 **Out of scope / separate ticket:** <pre-existing drift, follow-ups>
 ```
 
-Order the items by consequence, with lost detection and understated impact first. Skip a check that found nothing. Don't
-pad the list.
+Order the items by consequence, with lost detection and understated impact first. Skip a check that found nothing.
 
 ## Applying it
 
@@ -150,23 +138,19 @@ pad the list.
 - **After implementation:** run it again against the branch. Anything the ticket missed and the branch fixed is worth a
   comment, so the ticket explains the PR.
 
-## Example (anonymised)
+## Example
 
-> **Ticket:** "The outbox drainer wraps `publish` and `delete` in one `try`, so a failed delete is logged and counted as
-> a failed publish. Split them and add a `delete.failures` metric; add it to alarms if one exists."
+> **Ticket:** "The crate shipper wraps `ship` and `unload` in one `try`, so the shipper logs and counts a failed unload
+> as a failed shipment. Split them and add an `unload.failures` metric; add it to alarms if one exists."
 >
 > **Where it needs tightening:**
 >
-> 1. **The alarm is required, not optional.** `PublishFailedAlarm` (`alarms.ts:48`, threshold 0 for 3 minutes) is what
->    fires today when deletes fail. Moving delete failures to an unalarmed metric leaves only the backlog alarm, which
->    is slower and points at the wrong runbook section. Acceptance: add `DeleteFailedAlarm`, or alarm on both metrics.
-> 2. **A persistent delete failure is worse than one duplicate.** The drainer reads oldest first, so it re-sends the
->    same oldest batch every cycle and newer rows never drain. That's today's behaviour too, so it doesn't block the
->    ticket, but the new alarm pages at the same severity as the other outbox alarms.
-> 3. **The runbook is missing.** The outbox runbook needs the new alarm in its alarm table, the new log line in its log
->    table, and a "delete fails" triage case that points at the table, not the queue.
-> 4. **The metrics doc needs a row** for the new metric (`observability.md:69`), and the alarm total further down
->    changes too.
+> 1. **The ticket must require the alarm.** `ShipFailedAlarm` (`alarms.ts:48`, threshold 0 for 3 minutes) is what fires
+>    today when unloads fail. Moving unload failures to a metric with no alarm leaves only the backlog alarm, which is
+>    slower and points at the wrong runbook section. Acceptance: add `UnloadFailedAlarm`, or alarm on both metrics.
+> 2. **A persistent unload failure is worse than one duplicate.** The shipper reads oldest first, so it ships the same
+>    oldest crates every cycle and newer crates never ship. That is the behaviour today too, so it does not block the
+>    ticket. The new alarm still pages at the same severity as the other crate alarms.
 >
-> **Decisions to make:** what `drainOnce` returns on a delete failure. Pick one: count it in `failed` (the row stays;
+> **Decisions to make:** what `shipOnce` returns on an unload failure. Pick one: count it in `failed` (the crate stays;
 > recommended), or add a separate count. Only tests read it.
