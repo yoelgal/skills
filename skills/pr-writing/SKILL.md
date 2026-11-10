@@ -1,6 +1,6 @@
 ---
 name: pr-writing
-description:
+description: >-
   Write or edit a pull request title and description in plain prose that follows the rules of ASD-STE100 Simplified
   Technical English. Use when you open a pull request, or rewrite or update a description. Trigger phrases: write the
   PR description, PR body, describe this PR, rewrite the PR description, pr writing.

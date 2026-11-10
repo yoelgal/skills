@@ -1,6 +1,6 @@
 ---
 name: issue-review
-description:
+description: >-
   Review an issue or ticket for what its draft missed: wrong claims, lost alerts, persistent failures, stale docs,
   open decisions and scope. Use when you write or file an issue, review a ticket, or pick up a ticket to implement.
   Trigger phrases: review this issue, review the ticket, what did this ticket miss, tighten this ticket, issue review.

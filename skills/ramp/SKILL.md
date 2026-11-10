@@ -1,6 +1,6 @@
 ---
 name: ramp
-description:
+description: >-
   Run a read-only tutor session that teaches the background of a ticket from Linear, GitHub and Slack. Use when the
   user gives a ticket to ramp on, or does not understand the background of a ticket. Trigger phrases: ramp me up, ramp
   on this ticket, explain the background of this ticket, I don't understand this ticket.

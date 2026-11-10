@@ -1,6 +1,6 @@
 ---
 name: issue-writing
-description:
+description: >-
   Write or edit an issue or ticket in plain prose that follows the rules of ASD-STE100 Simplified Technical English.
   Use when you file a bug, write a ticket from a finding, or rewrite an issue that is hard to act on. Trigger phrases:
   write an issue, file a ticket, draft an issue, clean up this ticket, rewrite this issue, issue writing.
