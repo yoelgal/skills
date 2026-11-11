@@ -1,100 +1,101 @@
 # Writing rules
 
-Shared by the `issue-writing` and `pr-writing` skills. The two copies of this file must stay identical. Run
+Shared by the `issue-writing`, `issue-review` and `pr-writing` skills. The copies of this file must stay identical. Run
 `scripts/check-shared.sh` from the repo root after an edit.
 
-## STE writing rules
+Write like the author: an engineer who tells a busy teammate exactly what they need to know, then stops. The reader
+should understand the situation in one read and know what to do next. Detail they might need lives in the diff, the code
+or a collapsed section, never in the prose.
 
-### Words
+## Do all the work, show the conclusion
 
-- Use one term for one thing. Use the name from the code (the metric name, the class name, the alarm name). Repeat it.
-  Do not use synonyms for variety.
-- Describe what a thing is, not what it is not: "the crate stays in the warehouse", not "the crate is not lost".
-- Give a word only one meaning. If "check" is a verb, do not also use it as a noun for a CI job.
-- Use the simplest common word: "use", not "utilize"; "start", not "initiate"; "show", not "demonstrate"; "help", not
-  "facilitate"; "about", not "approximately".
-- Write the full verb, not a noun made from a verb: "decide", not "make a decision"; "the shipper unloads the crate",
-  not "the unloading of the crate is performed".
-- Keep noun clusters to three words or fewer. "crate unload failure count" is the limit. Break longer clusters with
-  "of", "for" or a relative clause.
-- Do not use contractions: "do not", not "don't".
-- Use technical names (code identifiers, product names, error codes) as they are, in backticks.
+Short text keeps the full rigour. Read the code, run the checks, prove each claim, and confirm each test fails without
+the fix. Then report the conclusion in one line: "3 new tests, each fails without the fix", not three bullets that each
+say so. The visible part is for a human who reads it once. Depth that a reviewer or an agent might want (each test, full
+logs, the reasoning behind a choice) goes in a collapsed `<details>` block at the end, kept to what is useful.
 
-### Sentences
+If a sentence states a fact the reader needs, keep it however short the budget is. Cut wording, never facts.
 
-- Write one idea per sentence.
-- Use the active voice. Name the actor: "The shipper unloads the crate", not "The crate is unloaded".
-- Use the simple tenses: simple present, simple past, future with "will". Do not use progressive forms such as "is
-  failing" or "has been failing".
-- Do not use "-ing" words as verbs or nouns, except in technical names. Write "when the unload fails", not "on failing
-  to unload".
-- Write requirements in the imperative: "Add an alarm", not "An alarm should be added" or "We might want to add an
-  alarm".
-- Keep the articles ("the", "a"). Do not write in telegraphic style.
-- Put a condition before the instruction: "If the unload fails, log the crate's id."
+## Plain words
 
-### Paragraphs and lists
+Write for an engineer a few weeks into the repo. They know the language and the stack, but not every service name, flag
+or past decision. Do not explain what a pull request or a process is. Do explain, in a few words, a term only this repo
+or this change uses.
 
-- Give each paragraph one topic. Use six sentences or fewer.
-- Use a list for three or more parallel items, or for steps. Use prose for one or two items.
-- Write list items in the same grammatical form. Start each requirement with a verb.
+- Say what happens in everyday words first, then give the code name if the reader needs it: "the dev script leaves the
+  API server running after you quit it (`start-full-stack.sh`)", not "`cleanup_processes` signals the job PID only".
+- One piece of jargon per sentence at most. If a sentence stacks two ("non-allowlisted public procedures"), rewrite it
+  around what the user or the system does.
+- Read it aloud. If you would not say it that way to a teammate at standup, rewrite it.
 
-## Fluff to delete
+## Titles
 
-Delete these on sight. Each one delays the reader or tells the reader what to think in place of a fact.
+A title is the one line most people read. It must make complete sense on its own to that new starter.
 
-**Openers and meta-text.** "This ticket aims to", "This PR", "The purpose of this issue is", "As discussed", "Just a
-heads-up", "Context:", "TL;DR", "Background" over a section that only repeats the Problem. Start with the fact.
+- Say what changes, for whom, in plain words. Use a code name only when it is the clearest name for the thing.
+- No stacked qualifiers, no internal shorthand, no AI phrasing ("ensure", "handle", "robust", "properly").
+- Write: `Stop the dev servers when the start script exits`. Not: `Signal the process group in cleanup_processes`.
+- Write: `Block third-party app tokens on endpoints that don't allow them`. Not: `Refuse OAuth app tokens on public
+  procedures that are not allowlisted`.
+- Write: `Show the HTTP status when the payment service returns a non-JSON error`. Not: `Report a non-JSON upstream
+  error by its HTTP status`.
 
-**Hedges without a reason.** "Maybe", "possibly", "might", "it seems", "we may want to", "consider". Keep a hedge only
-when there is a real unknown, and write the unknown as a fact: "The cause is not known. The logs from 02:00 to 03:00 are
-missing."
+## Voice
 
-**Puffery and labels.** "critical", "crucial", "important to note", "significant", "major issue", "a testament to",
-"plays a key role". Show the consequence and let the reader judge it: write "Newer crates do not ship while the fault
-continues", not "This is a critical issue".
+- **Lead with what happened, in plain words.** Describe the symptom the way a user or an operator sees it, then the
+  cause, then the fix. "After the verification link, home flashed 'check your email' for a split second, because the
+  redirect ran before the session knew the email was verified."
+- **Link cause and effect with "because" and "so".** "The page now refreshes the session before it redirects, so home
+  always reads a verified session." One sentence like that replaces a paragraph of bullets.
+- **Name things by what they are first, by identifier second.** "the verify page" in the summary, `VerifyEmailPage` in
+  the detail that needs it.
+- **Say the size and the state.** "Small one." "Tested on the iOS simulator, before and after videos below."
+  "Nothing reads the new secrets yet, the API side follows."
+- **Tell the reader what to do.** "Start at #101, each PR stacks on the one before." "The platform team owns the secret,
+  so they set the value." End with the question you need answered, if there is one: "OK with this direction?"
+- **Own mistakes in one line.** "My mistake, the docs say write-only. Fixed in #212."
+- **Sound like a person.** Contractions are fine. Write in the first person when you did something. Use full sentences,
+  but short ones, joined with commas when the ideas belong together.
 
-**Interpretive metadiscourse.** "The key point is", "Note that", "It is worth noting", "As you can see", "This
-distinction matters". Delete the aside and keep the fact.
+## Length
 
-**Weasel attribution.** "People say", "it is widely known", "best practice says". Name the source (a doc, a person, a
-file:line), or delete the claim.
+Length is the most common failure. Every skill that loads this file gives a word budget. Stay under it.
 
-**Binary contrast and colon reveals.** "This is not X, it is Y." "The real problem: the unload." State Y directly: "The
-unload fails."
+- Write the summary first, as if it were the whole document. Add more only when a reader would act wrongly without it.
+- One idea per sentence, about 20 words or fewer.
+- One line per bullet. A bullet that needs two lines is two facts, or one fact with padding.
+- Use a list only for three or more parallel items. One or two items go in a sentence.
+- Do not repeat a fact in two sections. Do not restate the title in the body.
+- Do not list what the diff, the test names or the CI log already show. Point at them.
+- Put long evidence (logs, full test lists, real-speed videos) in a `<details>` block.
 
-**Contrast language.** "rather than X", "instead of Y", "as opposed to Z". State what the thing is or does. Write "The
-shipper keeps the crate", not "The shipper keeps the crate rather than dropping it".
+## Delete on sight
 
-**Trailing -ing analysis.** "...highlighting the need for better monitoring." Replace it with the consequence: "...so no
-alarm fires."
+- **Openers and meta-text:** "This PR", "This ticket aims to", "Context:", "TL;DR", "Background", "As discussed".
+- **Hedges without a reason:** "maybe", "possibly", "it seems", "we may want to", "consider". If something is unknown,
+  say what is unknown: "Cause unknown, the logs for 02:00 to 03:00 are missing."
+- **Labels in place of consequences:** "critical", "significant", "major", "important to note". Say what breaks.
+- **Contrast framing:** "rather than X", "instead of Y", "not X, it's Y", "The real problem: ...". Say what it is.
+- **Trailing analysis:** "..., highlighting the need for better monitoring." Say the consequence: "..., so no alarm
+  fires."
+- **Recaps and kickers:** "In summary", "Overall", a last line that repeats what is above it.
+- **Narrative:** how the bug was found, who noticed it, how long it took.
+- **Formatting noise:** emoji, ALL CAPS, bold for emphasis, em dashes, headings over one sentence, horizontal rules.
+- **Words:** delve, foster, leverage, utilize, facilitate, empower, streamline, robust, seamless, holistic, paradigm,
+  landscape, multifaceted, meticulous, intricate, paramount, transformative, elevate, embark, supercharge, harness,
+  unlock, journey.
+- **Empty words:** just, simply, actually, really, basically, essentially, literally, truly, clearly, obviously, in
+  order to, due to the fact that, in terms of, with regard to, going forward.
 
-**Recap endings and kickers.** "In summary", "Overall", "Ultimately", or a last line that restates the text above it.
-End on the last requirement or acceptance criterion.
+## Precision
 
-**Narrative and provenance.** How the bug was found, who noticed it, how long the search took. Put it in a comment on
-the issue or PR if it helps. The description holds only what the reader needs to act.
+- Use one name for one thing, the name from the code. Do not vary it.
+- Put a location on a claim about the code when the reader needs to find it: `path/file.ts:72` or a function name.
+- Give numbers with units: "flashed in 4 of 4 runs", "times out after 5 s". Not "quickly" or "often".
+- Quote log lines, metric names and error text exactly, in backticks.
+- Say what you did not check: "Not checked: prod."
 
-**Formatting noise.** Emoji, ALL CAPS for emphasis, bold inside sentences for emphasis, headings over one-sentence
-sections, horizontal rules, nested bullets deeper than two levels. Use bold only for a list item's label.
+## GitHub and trackers
 
-**Banned words.** delve, foster, leverage, utilize, facilitate, empower, streamline, robust, seamless, cutting-edge,
-holistic, synergy, paradigm, game changer, tapestry, realm, landscape (outside geography), multifaceted, meticulous,
-intricate, paramount, transformative, elevate, embark, supercharge, harness, ever-evolving, unlock, navigate (outside UI
-navigation), journey.
-
-**Empty adverbs.** just, simply, actually, really, basically, literally, truly, fundamentally, importantly, crucially,
-inherently, clearly, obviously. Delete each one unless it changes the meaning.
-
-**Empty phrases.** in order to (write "to"), at this point in time (write "now"), due to the fact that (write
-"because"), in terms of, with regard to, when it comes to, going forward, at the end of the day, the reality is.
-
-**Em dashes.** Do not use them. Use a period, a comma, a colon before a list, or parentheses.
-
-## Precision rules
-
-- Give a location for every claim about the code: `path/file.ts:72`, a function name, or a config key.
-- Give numbers with units: "3 one-minute periods", "about 25 messages each second". Do not write "quickly" or "a lot".
-- Name the environment when behaviour differs between environments: "in prd", "in dev and stg".
-- Quote log messages, metric names and error text exactly, in backticks.
-- Do not state as fact what you did not check. Write "Not checked:" and the item.
+The voice comes from the author's Slack messages. In a PR or an issue, keep the voice and drop the chat habits: use
+sentence case, no "pls", no emoji, no greetings.

@@ -1,100 +1,89 @@
 ---
 name: pr-writing
 description: >-
-  Write or edit a pull request title and description in plain prose that follows the rules of ASD-STE100 Simplified
-  Technical English. Use when you open a pull request, or rewrite or update a description. Trigger phrases: write the
-  PR description, PR body, describe this PR, rewrite the PR description, pr writing.
+  Write or edit a pull request title and description in the author's voice: short, plain, and readable by someone new
+  to the repo. Use when you open a pull request, or rewrite or update a description. Trigger phrases: write the PR
+  description, PR body, describe this PR, rewrite the PR description, pr writing.
 ---
 
 # PR writing
 
-A PR description is the reviewer's guide to the diff. The reviewer reads it once, then reads the diff with it beside
-them. Each sentence must give that reviewer a fact, a consequence, a decision or a piece of evidence. Delete all other
-sentences.
+A reviewer reads the description once, then reads the diff. The description tells them what was wrong, what the change
+does and why they can trust it. The diff and CI carry everything else.
 
-The description is also where the reasons for the code go. A reason that does not earn a code comment (why the author
-chose against an alternative, where a value came from, what another team does) goes here.
+Read [references/writing-rules.md](references/writing-rules.md) before you write. It sets the voice, the plain-words
+rules and the title rules. Its length rules matter most here.
+
+## Budget
+
+- Summary: 80 words or fewer.
+- All prose: 200 words or fewer. Media, tables, code blocks and `<details>` blocks do not count.
+- A design, a migration or a contract change with callers may use up to 350 words. Say in the summary why it is large.
+
+Size the description to the diff. A small change gets a few sentences and no sections. If you are over budget, cut.
 
 ## Structure
 
-Use these sections, in this order. Problem and Change are the default. Add another section only when it holds a fact the
-reviewer cannot get from the diff. Do not add other sections. Another skill may append its own sections (a review table,
-a model line) after Follow-ups.
-
 ```markdown
-<Ticket link, one line, when the repo links tickets this way.>
+<Ticket line, when the repo links tickets this way: "Closes ENG-123".>
 
-## Problem
+<Summary, no heading. What was broken, as a user or an operator sees it. Why. What the change does now. Say "Small one."
+when it is.>
 
-<What the code did before this change, with file:line. What was wrong with that.>
+## Testing
 
-## Change
+<How the change is proved: the tests it adds and whether they fail without it, a check CI does not run, and before and
+after output when the Verification rule below applies.>
 
-<What the change does, one item per bullet, in the present tense. Each decision a reviewer could question, with its
-reason.>
+## Notes
 
-## Tests
-
-<The tests that prove the change, one per bullet: what each one checks, and whether it fails without the change.>
-
-## Verification
-
-<Only when the rule on runs outside CI applies: the command and its trimmed output, before and after the change.>
-
-## Not changed
-
-<Each thing a reviewer could expect this change to touch and it does not: a doc, a changeset, a migration. Give the
-reason for each.>
-
-## Follow-ups
-
-<Each problem found and left out of scope, with a location and the ticket that holds it, if one exists.>
+<One line each: a decision a reviewer could question, with its reason. Something a reviewer would expect this to change
+and it does not. A follow-up, with its ticket.>
 ```
 
-**Title.** Follow the repo's title format first: look at recent merged PRs for the prefix, the scope and the ticket
-format. In the words after the prefix, state the result in the present tense, with the names from the code. Keep the
-title to 72 characters or fewer when the format allows it.
+Omit a section with no content. Optionally end with `<details><summary>Details</summary>` holding depth a careful
+reviewer might want: each test and what it guards, full output, real-speed videos. Another skill may append its own
+section after Notes.
 
-- Write: `fix(peeler): peel a banana once when two orders for it arrive together`
-- Do not write: `fix: race condition`, `Fix ENG-123`, `Improve banana handling 🍌`
+**Title.** Follow the repo's title format first: check recent merged PRs for the prefix, scope and ticket format. After
+the prefix, follow the title rules in the writing rules, in 72 characters or fewer.
 
-## Length
+- Write: `fix(peeler): stop a banana from being peeled twice by two orders`
+- Do not write: `fix(peeler): record the banana id before the first await in peel`, `fix: race condition`, `Fix ENG-123`
 
-Size the description to the diff. A small change gets a few sentences. Do not walk through the diff file by file, and do
-not repeat what the code shows. Say what changed and why. If a sentence still makes sense with the diff closed, it
-belongs. If it only narrates the diff, delete it.
+## Rules
 
-## Writing rules
-
-Read [references/writing-rules.md](references/writing-rules.md) before you write, and apply every rule in it. Sentence limits in a PR description: 25
-words or fewer in Problem, and 20 words or fewer in every other section.
-
-## PR rules
-
-- Describe the current state of the change. After review changes, rewrite the description to match the code. Do not
-  write "Round 2", "previously" or "now also". The commits and the review threads hold the history.
-- If a test passes without the change, say what it guards.
+- Open with the problem, never with a list of files.
+- Describe the change as it is now. After review, rewrite the description to match. No "Round 2" or "now also".
+- Tests: say how many the change adds and whether they fail without it. If a test passes without the change, say what
+  it guards. Name a test only when its name tells the reviewer something the summary does not.
 - Do not list a check that CI runs, such as the test suite, lint or a typecheck, and never write "tests pass". List a
   check only when CI does not run it, such as a mutation test score.
-- Add Verification when the change alters a contract that a caller depends on, such as an API, an error or an event. Add
-  it too when the change depends on a real system that the tests mock. Run the built code against that system or a local
-  stand-in, and show the result before and after the change. If a test already runs the real path end to end, name it in
-  Tests in its place. If you could not run it, write "Not checked:" and the reason. For any other change, omit
-  Verification.
-- If the change alters a contract, name each caller of it and say what the change does to that caller.
-- Do not claim more than the change does. If the change fixes one case, name the cases it does not fix under Follow-ups.
-- Before you submit, check the title and the description for secrets and private details.
+- Verification: when the change alters a contract a caller depends on (an API, an error, an event), or depends on a real
+  system the tests mock, run the built code against that system or a local stand-in. Show the result before and after,
+  in Testing. If you could not run it, write "Not checked:" and the reason. For any other change, skip it.
+- If the change alters a contract, name each caller in Notes and say what the change does to it.
+- Do not claim more than the change does.
+- Check the title and the description for secrets and private details before you submit.
+
+## Review history
+
+A review skill such as `council` or `sol-loop` may append its results. Keep them to one visible line ("Council: 3
+rounds, final scores 8.5, 8 and 9.5, all findings fixed.") and put any table or per-round findings in `<details>`.
 
 ## Workflow
 
-1. Collect the facts: the diff against the base branch, the ticket and the checks that CI does not run. Read the diff.
-   Do not write from memory.
-2. Give the title and the description to the skill or the person that opens the PR, or update the open PR.
+1. Collect the facts: the diff against the base branch, the ticket, and any checks CI does not run. Read the diff.
+2. Write the summary as if it were the whole description. Could the reviewer start on the diff now?
+3. Add Testing and Notes only for what the reviewer would get wrong without them.
+4. Cut to budget, then give the title and description to whoever opens the PR, or update the open PR.
 
-When the user gives you a draft to edit, keep their facts and their decisions. Change the words and the structure only.
-Return the edited draft and a short list of the changes. If a fact is unclear, ask. Do not invent it.
+When the user gives you a draft to edit, keep their facts and decisions. Change the words and the length. If a fact is
+unclear, ask. Do not invent it.
 
 ## Example
+
+Before (accurate, but a form, and twice as long as it needs to be):
 
 > **fix(peeler): peel a banana once when two orders for it arrive together**
 >
@@ -114,7 +103,24 @@ Return the edited draft and a short list of the changes. If a fact is unclear, a
 >
 > - Two concurrent orders for one banana: one peel, one id. Fails without the change.
 > - Two concurrent orders for one banana with different styles: the second gets `conflict`. Fails without the change.
+
+After:
+
+> **fix(peeler): stop a banana from being peeled twice by two orders**
 >
-> ## Follow-ups
+> Two orders for the same banana at the same moment both got peeled, because `InMemoryPeeler.peel` recorded the banana
+> only after its first await. It now records it up front, so the second order gets the same peel, or `conflict` if it
+> asked for a different style. If the peel fails, the banana is freed so a retry can peel it.
 >
-> - `LocalPeeler.removeSkin` (`local-peeler.ts:36`) loses an update when orders for two bananas touch one bunch.
+> ## Testing
+>
+> 2 new tests for concurrent orders (same style, different style). Both fail without the change.
+>
+> ## Notes
+>
+> - `LocalPeeler.removeSkin` (`local-peeler.ts:36`) loses an update when orders for two bananas touch one bunch. Left
+>   for a follow-up.
+
+## Credits
+
+The words to delete adapt [no-ai-slop](https://github.com/petergyang/no-ai-slop) by Peter Yang, MIT License.

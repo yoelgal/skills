@@ -1,5 +1,4 @@
-Portions of skills/issue-writing/references/writing-rules.md and skills/pr-writing/references/writing-rules.md are
-adapted from no-ai-slop (https://github.com/petergyang/no-ai-slop), used under the following licence:
+Portions of skills/{issue-writing,issue-review,pr-writing}/references/writing-rules.md are adapted from no-ai-slop (https://github.com/petergyang/no-ai-slop), used under the following licence:
 
 MIT License
 
