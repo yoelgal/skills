@@ -6,8 +6,8 @@ Agent skills for Claude Code, Codex, Cursor and other agents that read `SKILL.md
 | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`explainer-video`](skills/explainer-video/SKILL.md) | Makes a narrated, animated explainer video from a set of sources: fact list, script for the ear, local Kokoro-82M voice, Manim scenes synced to the spoken words, and render checks |
 | [`issue-review`](skills/issue-review/SKILL.md)       | Reviews an issue or ticket for what the draft missed: alerting coverage, failure when it persists, docs blast radius, open decisions, scope                                         |
-| [`issue-writing`](skills/issue-writing/SKILL.md)     | Writes issues in fluff-free prose that follows the ASD-STE100 Simplified Technical English rules, in a fixed Problem / Impact / Change / Decisions / Acceptance structure           |
-| [`pr-writing`](skills/pr-writing/SKILL.md)           | Writes PR titles and descriptions in the same prose rules, sized to the diff: Problem and Change, plus other sections only when they add a fact the diff does not show              |
+| [`issue-writing`](skills/issue-writing/SKILL.md)     | Writes short issues in the author's voice and plain words: a summary, then Change and Acceptance, within a 200-word budget                                                         |
+| [`pr-writing`](skills/pr-writing/SKILL.md)           | Writes PR titles and short descriptions in the same voice, sized to the diff: a summary, then Testing and Notes only when needed, within a 200-word budget                         |
 | [`ramp`](skills/ramp/SKILL.md)                       | Runs a read-only tutor session on a ticket: gathers context from Linear, GitHub and Slack, then teaches it until you can make and defend the ticket's decisions                     |
 
 ## Install
@@ -27,13 +27,13 @@ npx skills add yoelgal/skills --skill issue-review -g -a claude-code
 Each skill is `skills/<name>/SKILL.md`, with `name` and `description` frontmatter. Scaffold a new one with
 `npx skills init <name>` inside `skills/`.
 
-`issue-writing` and `pr-writing` each carry a copy of `references/writing-rules.md`, because the installer copies one
-skill folder at a time. The copies must stay identical: edit both, then run `scripts/check-shared.sh`. CI runs the same
-check.
+`issue-writing`, `issue-review` and `pr-writing` each carry a copy of `references/writing-rules.md`, the shared voice
+and length rules, because the installer copies one skill folder at a time. The copies must stay identical: edit all
+three, then run `scripts/check-shared.sh`. CI runs the same check.
 
 ## Credits
 
-`issue-writing` and `pr-writing` adapt parts of [no-ai-slop](https://github.com/petergyang/no-ai-slop) (MIT). See
+`issue-writing`, `issue-review` and `pr-writing` adapt parts of [no-ai-slop](https://github.com/petergyang/no-ai-slop) (MIT). See
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Licence

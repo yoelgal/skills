@@ -10,6 +10,9 @@ description: >-
 
 Today's behaviour, if the ticket doesn't change it, is not a reason to block the ticket. Say so, and keep the gap.
 
+Write the review in the voice and length rules of [references/writing-rules.md](references/writing-rules.md). Run every
+check, but report only what changes the ticket.
+
 This skill checks what an issue says. The `issue-writing` skill controls how the issue says it. When you edit the
 issue after the review, apply `issue-writing` to the text you change.
 
@@ -117,8 +120,8 @@ Each acceptance criterion maps to a test, a snapshot, or a doc diff a reviewer c
 ```markdown
 **Where it needs tightening:**
 
-1. **<Short title, stated as the fix.>** <Evidence: file:line or quoted ticket text.> <Why it matters, in one or two
-   sentences.> <The ticket edit: what to add or change in the description or acceptance.>
+1. **<Short title, stated as the fix.>** <Evidence and why it matters, in one sentence with a file:line.> <The ticket
+   edit, in one sentence.>
 2. ...
 
 **Decisions to make:** <each open choice, with options and a recommendation>
@@ -126,7 +129,9 @@ Each acceptance criterion maps to a test, a snapshot, or a doc diff a reviewer c
 **Out of scope / separate ticket:** <pre-existing drift, follow-ups>
 ```
 
-Order the items by consequence, with lost detection and understated impact first. Skip a check that found nothing.
+Budget: 2 to 3 sentences per finding, 5 findings or fewer, 250 words or fewer in total. Order the findings by
+consequence, with lost detection and understated impact first. If more than 5 survive, keep the 5 with the worst
+consequence and list the rest as one line each under "Also:". Skip a check that found nothing. Omit an empty section.
 
 ## Applying it
 

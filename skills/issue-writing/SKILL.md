@@ -1,93 +1,90 @@
 ---
 name: issue-writing
 description: >-
-  Write or edit an issue or ticket in plain prose that follows the rules of ASD-STE100 Simplified Technical English.
-  Use when you file a bug, write a ticket from a finding, or rewrite an issue that is hard to act on. Trigger phrases:
-  write an issue, file a ticket, draft an issue, clean up this ticket, rewrite this issue, issue writing.
+  Write or edit an issue or ticket in the author's voice: short, plain, and readable by someone new to the repo. Use
+  when you file a bug, write a ticket from a finding, or rewrite an issue that is too long or hard to act on. Trigger
+  phrases: write an issue, file a ticket, draft an issue, clean up this ticket, rewrite this issue, issue writing.
 ---
 
 # Issue writing
 
-An issue is an instruction to an engineer who does not have your context. The engineer reads it once, then uses it as
-the specification. Each sentence must give that engineer a fact, a consequence, a requirement or a decision. Delete all
-other sentences.
+An issue tells an engineer without your context what is wrong and what to change. They read it once, then work from it.
 
-This skill controls the words and the structure. The `issue-review` skill controls the content: coverage, impact,
-docs and scope. Write with this skill, review with `issue-review`, then file.
+This skill controls the words and the length. The `issue-review` skill controls the content. Write with this skill,
+review with `issue-review`, then file.
+
+Read [references/writing-rules.md](references/writing-rules.md) before you write. It sets the voice, the plain-words
+rules and the title rules.
+
+## Budget
+
+- Summary: 80 words or fewer.
+- All prose: 200 words or fewer. Code blocks, logs and `<details>` blocks do not count.
+- Put agent-only detail (file lists, implementation plans, reproduction logs) in a collapsed "Agent notes" section at
+  the end. Keep it to what an implementer needs.
 
 ## Structure
 
-Use these sections, in this order. Omit a section that has no content. Do not add other sections.
-
 ```markdown
-## Problem
-
-<What the code does now, with file:line. What is wrong with that.>
-
-## Impact
-
-<What goes wrong, for whom, how often. Include the case where the fault continues.>
+<Summary, no heading. What is wrong, as a user or an operator sees it, with the code location. Why. What it costs, and
+what happens if it keeps happening.>
 
 ## Change
 
-<Requirements, one per bullet, in the imperative.>
-
-## Decisions
-
-<Each open choice: "Pick one:" with the options and a recommendation.>
+<What to do, one requirement per bullet, in the imperative.>
 
 ## Acceptance
 
-<Checkable outcomes: a test, a snapshot, an alert, a doc change.>
+<What a reviewer can see when it is done: a test, a snapshot, an alert, a doc change.>
+
+## Decisions
+
+<Optional. Each open choice: "Pick one:" with the options and a recommendation.>
 
 ## Out of scope
 
-<What this issue does not do, and the issue that does it.>
+<Optional. What this issue does not do, and the issue that does.>
 ```
 
-**Title.** State the defect or the result in present tense, in 70 characters or fewer. Use the names from the code.
+Omit an optional section when it is empty. Do not add other sections.
 
-- Write: `Crate shipper reports a failed unload as a failed shipment`
+**Title.** State the defect or the result in the present tense, in 70 characters or fewer, following the title rules in
+the writing rules.
+
+- Write: `Failed crate unloads are reported as failed shipments`
 - Do not write: `Fix banana issue`, `[BUG] Improve error handling in shipper`, `Investigate unload failures 🍌`
-
-## Writing rules
-
-Read [references/writing-rules.md](references/writing-rules.md) before you write, and apply every rule in it. Sentence limits in an issue: 20 words or
-fewer in Change, Decisions and Acceptance, and 25 words or fewer in Problem and Impact.
 
 ## Workflow
 
-1. Collect the facts: the code locations, the current behaviour, and the consequence. Read the code. Do not write from
-   memory.
-2. Run `issue-review` on the draft, if the user has it. Fold its findings into the draft.
-3. File the issue, or give the draft to the user.
+1. Collect the facts: the code locations, the current behaviour and the consequence. Read the code.
+2. Write the summary as if it were the whole issue. Could an engineer start from it?
+3. Add Change and Acceptance, then the optional sections if they have content. Cut to budget.
+4. Run `issue-review` on the draft, if the user has it. Fold in its findings and stay within budget.
+5. File the issue, or give the draft to the user.
 
-When the user gives you a draft to edit, keep their facts and their decisions. Change the words and the structure only.
-Return the edited draft and a short list of the changes. If a fact is unclear, ask. Do not invent it.
+When the user gives you a draft to edit, keep their facts and decisions. Change the words and the length. If a fact is
+unclear, ask. Do not invent it.
 
 ## Example
 
-> **Crate shipper reports a failed unload as a failed shipment**
+> **Failed crate unloads are reported as failed shipments**
 >
-> ## Problem
->
-> `CrateShipper.shipOnce` (`crate-shipper.ts:72-84`) calls `ship` and `warehouse.unload` in one `try`. When `ship`
-> succeeds and `unload` fails, the `catch` logs `crate shipment failed` and increments `crates.ship.failures`. Both are
-> false. The bananas are at the market.
->
-> ## Impact
->
-> - A warehouse fault shows as a market fault, so triage goes to the wrong dependency.
-> - When unloads continue to fail, the shipper sends the same oldest 25 crates each second. Newer crates do not ship.
+> `CrateShipper.shipOnce` (`crate-shipper.ts:72`) wraps `ship` and `warehouse.unload` in one `try`, so a failed unload
+> logs `crate shipment failed` and counts on `crates.ship.failures`. Triage then goes to the market, not the warehouse.
+> If unloads keep failing, the shipper re-sends the same oldest 25 crates every second and newer crates never ship.
 >
 > ## Change
 >
-> - Catch `ship` failures and `unload` failures separately.
-> - On an unload failure, log `crate unload failed after shipment` with `crateId`.
-> - Count unload failures on `crates.unload.failures`.
-> - Add `CrateUnloadFailedAlarm`, with the same threshold and periods as `CrateShipFailedAlarm`.
+> - Catch ship and unload failures separately.
+> - On an unload failure, log `crate unload failed after shipment` with the `crateId`, and count it on
+>   `crates.unload.failures`.
+> - Add `CrateUnloadFailedAlarm`, with the same threshold as `CrateShipFailedAlarm`.
 >
 > ## Acceptance
 >
-> - A unit test: the unload fails, the shipper counts an unload failure, the crate stays.
+> - A unit test where the unload fails: the unload failure is counted and the crate stays.
 > - The infra snapshot contains `CrateUnloadFailedAlarm`.
+
+## Credits
+
+The words to delete adapt [no-ai-slop](https://github.com/petergyang/no-ai-slop) by Peter Yang, MIT License.
