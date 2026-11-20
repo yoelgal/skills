@@ -14,6 +14,18 @@ does and why they can trust it. The diff and CI carry everything else.
 Read [references/writing-rules.md](references/writing-rules.md) before you write. It sets the voice, the plain-words
 rules and the title rules. Its length rules matter most here.
 
+## Repo rules first
+
+Read the repo's own pull request rules before you write: `CONTRIBUTING.md`, `AGENTS.md` or `CLAUDE.md` at the root and
+in the nearest folder to the change, and the pull request template in `.github/`. A repo rule wins over this skill.
+
+- A repo that forbids a section loses that section. If descriptions carry no test plan, leave out `## Testing` and move
+  a "Not checked:" line to Notes.
+- A repo that sets a title format, a ticket keyword or a template uses that format.
+- A repo that says to open drafts gets a draft.
+
+Tell the user which repo rule changed the shape of the description.
+
 ## Budget
 
 - Summary: 80 words or fewer.
@@ -107,7 +119,8 @@ rounds, final scores 8.5, 8 and 9.5, all findings fixed.") and put any table or 
 
 ## Workflow
 
-1. Collect the facts: the diff against the base branch, the ticket, and any checks CI does not run. Read the diff.
+1. Read the repo rules, then collect the facts: the diff against the base branch, the ticket, and any checks CI does
+   not run. Read the diff.
 2. Write the summary as if it were the whole description. Could the reviewer start on the diff now?
 3. Add Testing and Notes only for what the reviewer would get wrong without them.
 4. Cut to budget, then give the title and description to whoever opens the PR, or update the open PR.
