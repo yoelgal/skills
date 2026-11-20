@@ -30,6 +30,10 @@ Size the description to the diff. A small change gets a few sentences and no sec
 <Summary, no heading. What was broken, as a user or an operator sees it. Why. What the change does now. Say "Small one."
 when it is.>
 
+## Before and after
+
+<Only when the "Before and after diagrams" section below applies: one or two Mermaid flowcharts, then at most one table.>
+
 ## Testing
 
 <How the change is proved: the tests it adds and whether they fail without it, a check CI does not run, and before and
@@ -65,6 +69,36 @@ the prefix, follow the title rules in the writing rules, in 72 characters or few
 - If the change alters a contract, name each caller in Notes and say what the change does to it.
 - Do not claim more than the change does.
 - Check the title and the description for secrets and private details before you submit.
+
+## Before and after diagrams
+
+Add a `## Before and after` section after the summary when the change alters a flow the reader has to picture: what a
+user sees step by step, or where a value comes from. Skip it when a sentence explains the change.
+
+- Use one or two Mermaid `flowchart` blocks, then at most one table of who sees what. GitHub renders Mermaid in a
+  description. An HTML page or a local image does not render there.
+- Put the two states side by side. Use `flowchart TB`, declare the `After` subgraph first and the `Before` subgraph
+  second, and do not link them. Mermaid then draws Before on the left and After on the right. With `flowchart LR` the
+  two subgraphs stack.
+- Quote every label. Use plain words, one short step per box.
+- Show only what the code and the tests prove. An unproven claim goes in Notes.
+- Render each diagram, or run it through the Mermaid parser, before you post it.
+
+````markdown
+```mermaid
+flowchart TB
+  subgraph After
+    direction TB
+    a1["Page reloads with a stale cookie"] --> a2["Page render asks the account"]
+    a2 --> a3["Fan taps a post<br/>it opens"]
+  end
+  subgraph Before
+    direction TB
+    b1["Page reloads with a stale cookie"] --> b2["Page arrives unverified"]
+    b2 --> b3["Fan taps a post<br/>age prompt appears"]
+  end
+```
+````
 
 ## Review history
 
